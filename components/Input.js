@@ -1,4 +1,4 @@
-import { Text, View, TextInput, Button, Modal, StyleSheet } from 'react-native'
+import { Image, View, TextInput, Button, Modal, StyleSheet } from 'react-native'
 import { useState } from 'react'
 
 export default function Input({ sendChangedText, modalVisible, cancelPressed }) {
@@ -7,7 +7,11 @@ export default function Input({ sendChangedText, modalVisible, cancelPressed }) 
   return (
     <Modal visible={modalVisible}>
       <View style={styles.container}>
-        <TextInput style={{backgroundColor:'red'}} value={text} placeholder='please type here' onChangeText={(changedText) => {
+        <Image 
+        source={{uri:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Twemoji_1f600.svg/1200px-Twemoji_1f600.svg.png"}}
+        style={styles.img}
+        />
+        <TextInput style={{backgroundColor:'red', fontSize:16, padding:5,}} value={text} placeholder='please type here' onChangeText={(changedText) => {
           setText(changedText);
         }} />
         <Button
@@ -30,4 +34,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  img: {
+    width: 100,
+    height: 100,
+    margin: 20,
+  }
 });
