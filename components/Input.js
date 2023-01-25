@@ -1,23 +1,33 @@
-import { View, TextInput, Button } from 'react-native'
+import { Text, View, TextInput, Button, Modal, StyleSheet } from 'react-native'
 import { useState } from 'react'
 
-export default function Input({ sendChangedText }) {
+export default function Input({ sendChangedText, modalVisible, cancelPressed }) {
   const [text, setText] = useState();
-  function buttonPressed() {
-    sendChangedText(text);
-    setText();
-  }
 
   return (
-    <View>
-      <TextInput value={text} style={{ backgroundColor: 'red', }} placeholder='please type here' onChangeText={(changedText) => {
-        setText(changedText);
-        style={backgroundColor: 'red',}
-      }} />
-      <Button
-        title="Confirm"
-        onPress={buttonPressed}
-      />
-    </View>
+    <Modal visible={modalVisible}>
+      <View style={styles.container}>
+        <TextInput style={{backgroundColor:'red'}} value={text} placeholder='please type here' onChangeText={(changedText) => {
+          setText(changedText);
+        }} />
+        <Button
+          title="Confirm"
+          onPress={()=>sendChangedText(text)}
+        />
+        <Button
+          title="Cancel"
+          onPress={cancelPressed}
+        />
+      </View>
+    </Modal>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
