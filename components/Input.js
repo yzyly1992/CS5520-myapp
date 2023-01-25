@@ -11,7 +11,7 @@ export default function Input({ sendChangedText, modalVisible, cancelPressed }) 
         source={{uri:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Twemoji_1f600.svg/1200px-Twemoji_1f600.svg.png"}}
         style={styles.img}
         />
-        <TextInput style={{backgroundColor:'red', fontSize:16, padding:5,}} value={text} placeholder='please type here' onChangeText={(changedText) => {
+        <TextInput style={styles.input} value={text} placeholder='please type here' onChangeText={(changedText) => {
           setText(changedText);
         }} />
         <Button
@@ -38,5 +38,14 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     margin: 20,
+  },
+  input: {
+    fontSize:16, 
+    padding:5,
+    borderBottomColor: 'black',
+    borderBottomWidth: 2,
+    marginBottom: 10,
+    width: '50%',
+
   }
 });

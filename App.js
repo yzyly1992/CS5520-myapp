@@ -25,7 +25,7 @@ export default function App() {
       <Header appName={name} />
       <Input sendChangedText={onTextEntered} modalVisible={modalVisible} cancelPressed={onCancel}/>
       <Button title="Add A Task" onPress={()=>setModalVisible(true)} />
-      <Text>{enteredText}</Text>
+      <Text style={styles.info}>{enteredText}</Text>
     </View>
   );
 }
@@ -37,4 +37,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  info: {
+    fontSize: 18,
+  }
 });
