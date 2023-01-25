@@ -14,14 +14,20 @@ export default function Input({ sendChangedText, modalVisible, cancelPressed }) 
         <TextInput style={styles.input} value={text} placeholder='please type here' onChangeText={(changedText) => {
           setText(changedText);
         }} />
-        <Button
-          title="Confirm"
-          onPress={()=>sendChangedText(text)}
-        />
-        <Button
-          title="Cancel"
-          onPress={cancelPressed}
-        />
+        <View style={styles.buttonContainer}>
+          <View style={styles.button}>
+          <Button
+            title="Confirm"
+            onPress={()=>sendChangedText(text)}
+          />
+          </View>
+          <View style={styles.button}>
+          <Button
+            title="Cancel"
+            onPress={cancelPressed}
+          />
+          </View>
+        </View>
       </View>
     </Modal>
   )
@@ -46,6 +52,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     marginBottom: 10,
     width: '50%',
-
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+  },
+  button: {
+    margin: 10,
+    width: '30%',
+    backgroundColor: 'black',
   }
 });
