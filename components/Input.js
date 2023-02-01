@@ -2,7 +2,7 @@ import { Image, View, TextInput, Button, Modal, StyleSheet } from 'react-native'
 import { useState } from 'react'
 
 export default function Input({ sendChangedText, modalVisible, cancelPressed }) {
-  const [text, setText] = useState();
+  const [text, setText] = useState("");
 
   return (
     <Modal visible={modalVisible}>
@@ -18,6 +18,7 @@ export default function Input({ sendChangedText, modalVisible, cancelPressed }) 
           <View style={styles.button}>
           <Button
             title="Confirm"
+            disabled={!text.length}
             onPress={()=>sendChangedText(text)}
           />
           </View>
@@ -59,6 +60,6 @@ const styles = StyleSheet.create({
   button: {
     margin: 10,
     width: '30%',
-    backgroundColor: 'black',
+    backgroundColor: 'grey',
   }
 });
