@@ -28,7 +28,9 @@ export default function App() {
         <Button title="Add A Task" onPress={()=>setModalVisible(true)} />
         </View>
       <View style={styles.bottomContainer}>
-        <Text style={styles.info}>{enteredText}</Text>
+        <View style={styles.textContainer}>
+          <Text style={styles.text}>{enteredText}</Text>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -38,12 +40,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
+    alignItems: 'stretch',
     justifyContent: 'center',
-  },
-  info: {
-    fontSize: 18,
-    color: 'black',
   },
   topContainer: {
     flex: 1,
@@ -53,6 +51,15 @@ const styles = StyleSheet.create({
   bottomContainer: {
     flex: 4,
     backgroundColor: 'grey',
-    alignSelf: 'stretch',
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: 18,
+    color: "purple",
+  },
+  textContainer: {
+    borderRadius: 5,
+    backgroundColor: "yellow",
+    padding: 5,
   }
 });
