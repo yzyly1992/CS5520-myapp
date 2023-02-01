@@ -23,13 +23,18 @@ export default function App() {
     setModalVisible(false);
   }
 
+  function onDeletePressed (deleteId) {
+    // console.log(id);
+    setGoals(prev => goals.filter(goal => goal.id !== deleteId));
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
       <View style={styles.topContainer}>
         <Header appName={name} />
         <Input sendChangedText={onTextEntered} modalVisible={modalVisible} cancelPressed={onCancel}/>
-        <Button title="Add A Task" onPress={()=>setModalVisible(true)} />
+        <Button title="Add A Task" onPress={()=>setModalVisible(true)}/>
       </View>
       <View style={styles.bottomContainer}>
         <FlatList
@@ -37,7 +42,7 @@ export default function App() {
           data={goals}
           renderItem={({ item })=>{
             return (
-            <GoalItem item={item} />
+            <GoalItem item={item} onDelete={()=>onDeletePressed(item.id)}/>
             )
           }}
         />

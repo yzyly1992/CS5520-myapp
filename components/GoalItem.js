@@ -5,7 +5,11 @@ export default function GoalItem(props) {
   return (
     <View style={styles.textContainer}>
         <Text style={styles.text}>{props.item.text}</Text>
-        <Button title="X" />
+        <Button 
+        title="X" 
+        onPress={()=>props.onDelete()}
+        color="black"
+        />
     </View>
   )
 }
@@ -16,8 +20,9 @@ const styles = StyleSheet.create({
         color: "purple",
     },
     textContainer: {
-        // position: "inline-flex",
         flexDirection: "row",
+        alignItems: "center",
+        // justifyContent: "space-between",
         borderRadius: 5,
         backgroundColor: "yellow",
         padding: 5,
