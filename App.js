@@ -7,11 +7,14 @@ import Input from "./components/Input";
 export default function App() {
   
   const name = "my awesome app";
-  const [enteredText, setEnteredText] =  useState("Default Value");
+  // const [enteredText, setEnteredText] =  useState("Default Value");
+  const [goals, setGoals] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
   function onTextEntered(changedText) {
-    setEnteredText(changedText);
+    // setEnteredText(changedText);
+    const newGoal = {text:changedText, id:Math.floor(Math.random() * 100)};
+    setGoals(prev => [...prev, newGoal]);
     setModalVisible(false);
   }
 
@@ -28,9 +31,15 @@ export default function App() {
         <Button title="Add A Task" onPress={()=>setModalVisible(true)} />
         </View>
       <View style={styles.bottomContainer}>
-        <View style={styles.textContainer}>
-          <Text style={styles.text}>{enteredText}</Text>
-        </View>
+        {
+          goals.map( (e) => {
+            return (
+            <View style={styles.textContainer} key={e.id}>
+              <Text style={styles.text}>{e.text}</Text>
+            </View>
+            )
+          } )
+        }
       </View>
     </SafeAreaView>
   );
@@ -61,5 +70,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: "yellow",
     padding: 5,
+    margin: 5,
   }
 });
