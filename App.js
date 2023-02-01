@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { StyleSheet, Text, View, Button, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, Button, SafeAreaView, ScrollView } from 'react-native';
 import Header from "./components/Header";
 import Input from "./components/Input";
 
@@ -29,17 +29,19 @@ export default function App() {
         <Header appName={name} />
         <Input sendChangedText={onTextEntered} modalVisible={modalVisible} cancelPressed={onCancel}/>
         <Button title="Add A Task" onPress={()=>setModalVisible(true)} />
-        </View>
+      </View>
       <View style={styles.bottomContainer}>
-        {
-          goals.map( (e) => {
-            return (
-            <View style={styles.textContainer} key={e.id}>
-              <Text style={styles.text}>{e.text}</Text>
-            </View>
-            )
-          } )
-        }
+        <ScrollView contentContainerStyle={styles.scrollContentsStyle} alwaysBounceVertical={false}>
+          {
+            goals.map( (e) => {
+              return (
+              <View style={styles.textContainer} key={e.id}>
+                <Text style={styles.text}>{e.text}</Text>
+              </View>
+              )
+            } )
+          }
+        </ScrollView>
       </View>
     </SafeAreaView>
   );
@@ -60,10 +62,9 @@ const styles = StyleSheet.create({
   bottomContainer: {
     flex: 4,
     backgroundColor: 'grey',
-    alignItems: 'center',
   },
   text: {
-    fontSize: 18,
+    fontSize: 50,
     color: "purple",
   },
   textContainer: {
@@ -71,5 +72,8 @@ const styles = StyleSheet.create({
     backgroundColor: "yellow",
     padding: 5,
     margin: 5,
+  },
+  scrollContentsStyle: {
+    alignItems: 'center',
   }
 });
