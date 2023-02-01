@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { StyleSheet, Text, View, Button, SafeAreaView, ScrollView, FlatList } from 'react-native';
+import GoalItem from './components/GoalItem';
 import Header from "./components/Header";
 import Input from "./components/Input";
 
@@ -36,9 +37,7 @@ export default function App() {
           data={goals}
           renderItem={({ item })=>{
             return (
-            <View style={styles.textContainer}>
-              <Text style={styles.text}>{item.text}</Text>
-            </View>
+            <GoalItem item={item} />
             )
           }}
         />
