@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { StyleSheet, Text, View, Button, SafeAreaView, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Button, SafeAreaView, ScrollView, FlatList } from 'react-native';
 import Header from "./components/Header";
 import Input from "./components/Input";
 
@@ -13,7 +13,7 @@ export default function App() {
 
   function onTextEntered(changedText) {
     // setEnteredText(changedText);
-    const newGoal = {text:changedText, id:Math.floor(Math.random() * 100)};
+    const newGoal = {text:changedText, id:Math.random()};
     setGoals(prev => [...prev, newGoal]);
     setModalVisible(false);
   }
@@ -31,7 +31,18 @@ export default function App() {
         <Button title="Add A Task" onPress={()=>setModalVisible(true)} />
       </View>
       <View style={styles.bottomContainer}>
-        <ScrollView contentContainerStyle={styles.scrollContentsStyle} alwaysBounceVertical={false}>
+        <FlatList
+          contentContainerStyle={styles.scrollContentsStyle}
+          data={goals}
+          renderItem={({ item })=>{
+            return (
+            <View style={styles.textContainer}>
+              <Text style={styles.text}>{item.text}</Text>
+            </View>
+            )
+          }}
+        />
+        {/* <ScrollView contentContainerStyle={styles.scrollContentsStyle} alwaysBounceVertical={false}>
           {
             goals.map( (e) => {
               return (
@@ -41,7 +52,7 @@ export default function App() {
               )
             } )
           }
-        </ScrollView>
+        </ScrollView> */}
       </View>
     </SafeAreaView>
   );
