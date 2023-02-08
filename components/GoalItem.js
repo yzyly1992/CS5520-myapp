@@ -8,7 +8,14 @@ export default function GoalItem(props) {
       <Pressable
         onPress={props.onGoalPressed}
         android_ripple={{ color:"red", borderless:false, radius:10, foreground: true }}
-        style={styles.textContainer}
+        style={({ pressed })=>{
+          // console.log(pressed);
+          if (pressed) {
+            return [styles.textContainer, styles.pressedStyle];
+          } else {
+            return styles.textContainer;
+          }
+        }}
       >
             <Text style={styles.text}>{props.item.text}</Text>
             <Button 
@@ -35,4 +42,8 @@ const styles = StyleSheet.create({
         padding: 5,
         margin: 5,
     },
+    pressedStyle: {
+      backgroundColor: "red",
+      opacity: "0.5",
+    }
 })
