@@ -28,6 +28,10 @@ export default function App() {
     setGoals(prev => goals.filter(goal => goal.id !== deleteId));
   }
 
+  function goalPressed(goalId) {
+    console.log("pressed: " + goalId);
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
@@ -42,7 +46,7 @@ export default function App() {
           data={goals}
           renderItem={({ item })=>{
             return (
-            <GoalItem item={item} onDelete={()=>onDeletePressed(item.id)}/>
+            <GoalItem item={item} onDelete={()=>onDeletePressed(item.id)} onGoalPressed={()=>goalPressed(item.id)}/>
             )
           }}
         />
