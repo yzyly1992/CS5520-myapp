@@ -1,5 +1,7 @@
 import { View, Text, StyleSheet, Button, Pressable } from 'react-native'
 import React from 'react'
+import PressableButton from "./PressableButton"
+import { AntDesign } from '@expo/vector-icons'; 
 
 export default function GoalItem(props) {
 
@@ -18,11 +20,13 @@ export default function GoalItem(props) {
         }}
       >
             <Text style={styles.text}>{props.item.text}</Text>
-            <Button 
-            title="X" 
-            onPress={()=>props.onDelete()}
-            color="black"
-            />
+            <PressableButton 
+              customizedStyle={styles.textContainer}
+              pressedStyle={styles.pressedStyle}
+              buttonPressed={props.onDelete}
+            >
+              <AntDesign name="delete" size={24} color="grey" />
+            </PressableButton>
       </Pressable>
     </View>
   )
@@ -45,5 +49,5 @@ const styles = StyleSheet.create({
     pressedStyle: {
       backgroundColor: "red",
       opacity: "0.5",
-    }
+    },
 })

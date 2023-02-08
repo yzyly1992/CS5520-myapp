@@ -1,5 +1,6 @@
-import { Image, View, TextInput, Button, Modal, StyleSheet } from 'react-native'
+import { Image, View, TextInput, Button, Modal, StyleSheet, Text } from 'react-native'
 import { useState } from 'react'
+import PressableButton from './PressableButton';
 
 export default function Input({ sendChangedText, modalVisible, cancelPressed }) {
   const [text, setText] = useState("");
@@ -22,12 +23,13 @@ export default function Input({ sendChangedText, modalVisible, cancelPressed }) 
             onPress={()=>sendChangedText(text)}
           />
           </View>
-          <View style={styles.button}>
-          <Button
-            title="Cancel"
-            onPress={cancelPressed}
-          />
-          </View>
+          <PressableButton
+            customizedStyle={styles.button}
+            pressedStyle={{backgroundColor:"pink", opacity:"0.5"}}
+            buttonPressed={cancelPressed}
+          >
+            <Text style={styles.buttonText}>Cancel</Text>
+          </PressableButton>
         </View>
       </View>
     </Modal>
@@ -61,5 +63,11 @@ const styles = StyleSheet.create({
     margin: 10,
     width: '30%',
     backgroundColor: 'grey',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    fontSize: 18,
+    color: "red",
   }
 });
