@@ -1,98 +1,34 @@
-import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
-import { StyleSheet, Text, View, Button, SafeAreaView, ScrollView, FlatList } from 'react-native';
-import GoalItem from './components/GoalItem';
-import Header from "./components/Header";
-import Input from "./components/Input";
+import { View, Text } from 'react-native';
+import React from 'react';
+import Home from './Home';
+import GoalDetail from './components/GoalDetail';
+import { NavigationContainer } from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { AntDesign } from '@expo/vector-icons'; 
+import PressableButton from './components/PressableButton';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  
-  const name = "my awesome app";
-  // const [enteredText, setEnteredText] =  useState("Default Value");
-  const [goals, setGoals] = useState([]);
-  const [modalVisible, setModalVisible] = useState(false);
-
-  function onTextEntered(changedText) {
-    // setEnteredText(changedText);
-    const newGoal = {text:changedText, id:Math.random()};
-    setGoals(prev => [...prev, newGoal]);
-    setModalVisible(false);
-  }
-
-  function onCancel() {
-    setModalVisible(false);
-  }
-
-  function onDeletePressed (deleteId) {
-    // console.log(id);
-    setGoals(prev => goals.filter(goal => goal.id !== deleteId));
-  }
-
-  function goalPressed(goalId) {
-    console.log("pressed: " + goalId);
-  }
-
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar style="auto" />
-      <View style={styles.topContainer}>
-        <Header appName={name} />
-        <Input sendChangedText={onTextEntered} modalVisible={modalVisible} cancelPressed={onCancel}/>
-        <Button title="Add A Task" onPress={()=>setModalVisible(true)}/>
-      </View>
-      <View style={styles.bottomContainer}>
-        <FlatList
-          contentContainerStyle={styles.scrollContentsStyle}
-          data={goals}
-          renderItem={({ item })=>{
-            return (
-            <GoalItem item={item} onDelete={()=>onDeletePressed(item.id)} onGoalPressed={()=>goalPressed(item.id)}/>
-            )
-          }}
-        />
-        {/* <ScrollView contentContainerStyle={styles.scrollContentsStyle} alwaysBounceVertical={false}>
-          {
-            goals.map( (e) => {
-              return (
-              <View style={styles.textContainer} key={e.id}>
-                <Text style={styles.text}>{e.text}</Text>
-              </View>
-              )
-            } )
-          }
-        </ScrollView> */}
-      </View>
-    </SafeAreaView>
-  );
+    <NavigationContainer>
+        <Stack.Navigator screenOptions={{headerStyle:{backgroundColor:"pink"}, headerTitleStyle:{color:"purple", fontSize: 18}, headerTitleAlign:"center"}}>
+            <Stack.Screen name="Home" component={Home} options={{
+                title:"Home Page",
+                headerRight: ()=>{
+                    return (
+                        <PressableButton
+                            // customizedStyle={{backgroundColor:"white", opacity:"1"}}
+                            pressedStyle={{backgroundColor:"pink", opacity:"0.3"}}
+                            buttonPressed={()=>console.log("pressed")}
+                        >
+                            <AntDesign name="warning" size={24} color="white" />
+                        </PressableButton>
+                    )
+                }
+                }} />
+            <Stack.Screen name="Detail" component={GoalDetail} />
+        </Stack.Navigator>
+    </NavigationContainer>
+  )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'stretch',
-    justifyContent: 'center',
-  },
-  topContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  bottomContainer: {
-    flex: 4,
-    backgroundColor: 'grey',
-  },
-  text: {
-    fontSize: 50,
-    color: "purple",
-  },
-  textContainer: {
-    borderRadius: 5,
-    backgroundColor: "yellow",
-    padding: 5,
-    margin: 5,
-  },
-  scrollContentsStyle: {
-    alignItems: 'center',
-  }
-});
