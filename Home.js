@@ -5,24 +5,25 @@ import GoalItem from './components/GoalItem';
 import Header from "./components/Header";
 import Input from "./components/Input";
 import { writeToDB, deleteItem } from './Firebase/firestoreHelper';
-import { onSnapshot, collection } from 'firebase/firestore';
-import { db } from './Firebase/firebase-setup';
+import { onSnapshot, collection, where, query } from 'firebase/firestore';
+import { db, auth } from './Firebase/firebase-setup';
 
 export default function Home({navigation}) {
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "goals"), (querySnapshot) => {
+    const unsubscribe = onSnapshot(query(collection(db, "goals"), where("user", "==", auth.currentUser.uid)),(querySnapshot) => {
       if (querySnapshot.empty) {
         setGoals([]);
       } else {
-        // console.log(querySnapshot.docs[1].data());
-
         const newGoals = [];
         querySnapshot.forEach((doc) => {
             newGoals.push({ ...doc.data(), id:doc.id });
         });
         setGoals(newGoals);
       }
+    },
+    (err) => {
+      console.log(err);
     });
 
     // cleanup function

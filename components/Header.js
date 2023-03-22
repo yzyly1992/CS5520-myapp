@@ -6,8 +6,8 @@ const windowHeight = Dimensions.get("window").height;
 
 export default function Header({ appName }) {
   const {width, height} = useWindowDimensions();
-  console.log(width);
-  console.log(Platform.OS)
+  // console.log(width);
+  // console.log(Platform.OS)
   const paddingVerticalDynamic = width < 380 ? 10 : 2;
   return (
     <View style={styles.container}>
