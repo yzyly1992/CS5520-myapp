@@ -6,7 +6,8 @@ import Header from "./components/Header";
 import Input from "./components/Input";
 import { writeToDB, deleteItem } from './Firebase/firestoreHelper';
 import { onSnapshot, collection, where, query } from 'firebase/firestore';
-import { db, auth } from './Firebase/firebase-setup';
+import { db, auth, storage } from './Firebase/firebase-setup';
+import { ref, uploadBytesResumable } from 'firebase/storage';
 
 export default function Home({navigation}) {
 
@@ -38,12 +39,31 @@ export default function Home({navigation}) {
   const [goals, setGoals] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
-  function onTextEntered(changedText) {
+  async function onTextEntered(dataFromInput) {
+    // if (dataFromInput.)
     // setEnteredText(changedText);
-    const newGoal = {text:changedText};
+    let imageURI = "";
+    if (dataFromInput.imageURI) {
+      imageURI = await fetchImage(dataFromInput.imageURI);
+    }
+    const newGoal = {text:dataFromInput.text, imageURI: imageURI};
     setGoals(prev => [...prev, newGoal]);
     writeToDB(newGoal);
+    
     setModalVisible(false);
+  }
+
+  async function fetchImage(uri) {
+    try {
+    const response = await fetch(uri);
+    const imageBlob = await response.blob();
+    const imageName = uri.substring(uri.lastIndexOf('/') + 1);
+    const imageRef = await ref(storage, `images/${imageName}`)
+    const uploadResult = await uploadBytesResumable(imageRef, imageBlob);
+    return uploadResult.metadata.fullPath;
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   function onCancel() {

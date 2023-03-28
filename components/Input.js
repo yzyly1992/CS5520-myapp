@@ -1,9 +1,15 @@
 import { Image, View, TextInput, Button, Modal, StyleSheet, Text } from 'react-native'
 import { useState } from 'react'
 import PressableButton from './PressableButton';
+import ImageManager from './ImageManager';
 
 export default function Input({ sendChangedText, modalVisible, cancelPressed }) {
   const [text, setText] = useState("");
+  const [imageURI, setImageURI] = useState();
+  function imageUriHandler(uri) {
+    console.log(uri);
+    setImageURI(uri);
+  }
 
   return (
     <Modal visible={modalVisible}>
@@ -15,12 +21,13 @@ export default function Input({ sendChangedText, modalVisible, cancelPressed }) 
         <TextInput style={styles.input} value={text} placeholder='please type here' onChangeText={(changedText) => {
           setText(changedText);
         }} />
+        <ImageManager imageUriHandler={imageUriHandler}/>
         <View style={styles.buttonContainer}>
           <View style={styles.button}>
           <Button
             title="Confirm"
             disabled={!text.length}
-            onPress={()=>sendChangedText(text)}
+            onPress={()=>sendChangedText({text, imageURI})}
           />
           </View>
           <PressableButton
