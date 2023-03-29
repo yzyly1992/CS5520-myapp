@@ -8,7 +8,7 @@ export default function ImageManager({ imageUriHandler }) {
 
     async function verifyPermission() {
         // console.log(permissionInfo);
-        if (!permissionInfo.granted) {
+        if (permissionInfo.granted) {
             return true;
         }
     

@@ -12,6 +12,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './Firebase/firebase-setup';
 import Profile from './components/Profile';
 import { signOut } from 'firebase/auth';
+import Map from './components/Map';
 
 const Stack = createNativeStackNavigator();
 
@@ -52,6 +53,7 @@ const AppStack = (<>
                 }
                 }}} />
             <Stack.Screen name="Detail" component={GoalDetail} />
+            <Stack.Screen name="Map" component={Map} />
             <Stack.Screen name="Profile" component={Profile} options={{
                 title:"Profile",
                 headerRight: ()=>{
