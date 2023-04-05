@@ -1,4 +1,3 @@
-import { View, Text } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import Home from './Home';
 import Login from './components/Login';
@@ -13,75 +12,97 @@ import { auth } from './Firebase/firebase-setup';
 import Profile from './components/Profile';
 import { signOut } from 'firebase/auth';
 import Map from './components/Map';
+import * as Notifications from "expo-notifications";
+import { Linking } from 'react-native';
+
+Notifications.setNotificationHandler({
+    handleNotification: async ()=>{
+        return { shouldShowAlert: true, shouldSetBadge: true, shouldPlaySound: true, }
+    }
+})
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-useEffect(() => {
-    onAuthStateChanged(auth, (user)=>{
-        if (user) {
-            setIsAuthenticated(true);
-        } else {
-            setIsAuthenticated(false);
+    useEffect(() => {
+        const subscription1 = Notifications.addNotificationReceivedListener((notification)=>{
+            console.log(notification.request.content.data.url);
+        });
+        const subscription2 = Notifications.addNotificationResponseReceivedListener((response)=>{
+            // console.log(response.notification.request.content.data.url);
+            Linking.openURL(response.notification.request.content.data.url);
+        });
+        return () => {
+            subscription1.remove();
+            subscription2.remove();
         }
-    });
-},[]);
+    },[]);
 
-const AuthStack = (
-<>
-<Stack.Screen name="Login" component={Login} />
-<Stack.Screen name="Signup" component={Signup} />
-</>
-)
+    useEffect(() => {
+        onAuthStateChanged(auth, (user)=>{
+            if (user) {
+                setIsAuthenticated(true);
+            } else {
+                setIsAuthenticated(false);
+            }
+        });
+    },[]);
 
-const AppStack = (<>
-            <Stack.Screen name="Home" component={Home} options={({ navigation }) => {
-                return {
-                title:"Home Page",
-                headerRight: ()=>{
-                    return (
-                        <PressableButton
-                            // customizedStyle={{backgroundColor:"white", opacity:"1"}}
-                            pressedStyle={{backgroundColor:"pink", opacity:"0.3"}}
-                            buttonPressed={()=>navigation.navigate("Profile")}
-                        >
-                            <AntDesign name="meh" size={24} color="purple" />
-                        </PressableButton>
-                    )
-                }
-                }}} />
-            <Stack.Screen name="Detail" component={GoalDetail} />
-            <Stack.Screen name="Map" component={Map} />
-            <Stack.Screen name="Profile" component={Profile} options={{
-                title:"Profile",
-                headerRight: ()=>{
-                    return (
-                        <PressableButton
-                            // customizedStyle={{backgroundColor:"white", opacity:"1"}}
-                            pressedStyle={{backgroundColor:"pink", opacity:"0.3"}}
-                            buttonPressed={async ()=>{
-                                try {
-                                    await signOut(auth);
-                                } catch (err) {
-                                    console.log("Signout err", err);
-                                }
-                            }}
-                        >
-                            <AntDesign name="logout" size={24} color="purple" />
-                        </PressableButton>
-                    )
-                }
-                }}
-            />
-</>)
+    const AuthStack = (
+    <>
+    <Stack.Screen name="Login" component={Login} />
+    <Stack.Screen name="Signup" component={Signup} />
+    </>
+    )
 
-  return (
-    <NavigationContainer>
-        <Stack.Navigator screenOptions={{headerStyle:{backgroundColor:"pink"}, headerTitleStyle:{color:"purple", fontSize: 18}, headerTitleAlign:"center"}}>
-            {isAuthenticated ? AppStack : AuthStack}
-        </Stack.Navigator>
-    </NavigationContainer>
-  )
+    const AppStack = (<>
+                <Stack.Screen name="Home" component={Home} options={({ navigation }) => {
+                    return {
+                    title:"Home Page",
+                    headerRight: ()=>{
+                        return (
+                            <PressableButton
+                                // customizedStyle={{backgroundColor:"white", opacity:"1"}}
+                                pressedStyle={{backgroundColor:"pink", opacity:"0.3"}}
+                                buttonPressed={()=>navigation.navigate("Profile")}
+                            >
+                                <AntDesign name="meh" size={24} color="purple" />
+                            </PressableButton>
+                        )
+                    }
+                    }}} />
+                <Stack.Screen name="Detail" component={GoalDetail} />
+                <Stack.Screen name="Map" component={Map} />
+                <Stack.Screen name="Profile" component={Profile} options={{
+                    title:"Profile",
+                    headerRight: ()=>{
+                        return (
+                            <PressableButton
+                                // customizedStyle={{backgroundColor:"white", opacity:"1"}}
+                                pressedStyle={{backgroundColor:"pink", opacity:"0.3"}}
+                                buttonPressed={async ()=>{
+                                    try {
+                                        await signOut(auth);
+                                    } catch (err) {
+                                        console.log("Signout err", err);
+                                    }
+                                }}
+                            >
+                                <AntDesign name="logout" size={24} color="purple" />
+                            </PressableButton>
+                        )
+                    }
+                    }}
+                />
+    </>)
+
+    return (
+        <NavigationContainer>
+            <Stack.Navigator screenOptions={{headerStyle:{backgroundColor:"pink"}, headerTitleStyle:{color:"purple", fontSize: 18}, headerTitleAlign:"center"}}>
+                {isAuthenticated ? AppStack : AuthStack}
+            </Stack.Navigator>
+        </NavigationContainer>
+    )
 }
