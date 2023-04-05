@@ -4,22 +4,6 @@ import * as Notifications from "expo-notifications";
 
 export default function NotificationManager() {
 
-    async function verifyPermission() {
-        const permissionResponse = Notifications.getPermissionsAsync();
-        // console.log(permissionInfo);
-        if (permissionResponse.granted) {
-            return true;
-        }
-    
-        try {
-            const result = await Notifications.requestPermissionsAsync();
-            // console.log(result)
-            return result.granted;
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
     async function scheduleNotification() {
         const hasPermission = await verifyPermission();
         if (!hasPermission) {
@@ -36,4 +20,20 @@ export default function NotificationManager() {
       <Button title="Schedule Notification" onPress={()=>scheduleNotification()} />
     </View>
   )
+}
+
+export async function verifyPermission() {
+    const permissionResponse = Notifications.getPermissionsAsync();
+    // console.log(permissionInfo);
+    if (permissionResponse.granted) {
+        return true;
+    }
+
+    try {
+        const result = await Notifications.requestPermissionsAsync();
+        // console.log(result)
+        return result.granted;
+    } catch (err) {
+        console.log(err);
+    }
 }

@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect } from 'react';
-import { StyleSheet, View, Button, SafeAreaView, ScrollView, FlatList } from 'react-native';
+import { StyleSheet, View, Button, SafeAreaView, ScrollView, FlatList, Alert } from 'react-native';
 import GoalItem from './components/GoalItem';
 import Header from "./components/Header";
 import Input from "./components/Input";
@@ -8,8 +8,22 @@ import { writeToDB, deleteItem } from './Firebase/firestoreHelper';
 import { onSnapshot, collection, where, query } from 'firebase/firestore';
 import { db, auth, storage } from './Firebase/firebase-setup';
 import { ref, uploadBytesResumable } from 'firebase/storage';
+import {getExpoPushTokenAsync} from "expo-notifications";
+import { verifyPermission } from "./components/NotificationManager";
 
 export default function Home({navigation}) {
+
+  useEffect(()=>{
+    async function getToken() {
+      try {
+        const token = await getExpoPushTokenAsync();
+        console.log(token);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    getToken();
+  })
 
   useEffect(() => {
     const unsubscribe = onSnapshot(query(collection(db, "goals"), where("user", "==", auth.currentUser.uid)),(querySnapshot) => {
