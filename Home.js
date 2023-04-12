@@ -4,26 +4,34 @@ import { StyleSheet, View, Button, SafeAreaView, ScrollView, FlatList, Alert } f
 import GoalItem from './components/GoalItem';
 import Header from "./components/Header";
 import Input from "./components/Input";
-import { writeToDB, deleteItem } from './Firebase/firestoreHelper';
+import { writeToDB, deleteItem, addUserInfo, getUserInfo } from './Firebase/firestoreHelper';
 import { onSnapshot, collection, where, query } from 'firebase/firestore';
 import { db, auth, storage } from './Firebase/firebase-setup';
 import { ref, uploadBytesResumable } from 'firebase/storage';
 import {getExpoPushTokenAsync} from "expo-notifications";
 import { verifyPermission } from "./components/NotificationManager";
+import * as Notifications from "expo-notifications";
 
 export default function Home({navigation}) {
 
   useEffect(()=>{
     async function getToken() {
+      if (Platform.OS === "android") {
+        await Notifications.setNotificationChannelAsync("default", {
+        name: "default",
+        importance: Notifications.AndroidImportance.MAX,
+        });
+      }
       try {
         const token = await getExpoPushTokenAsync();
         console.log(token);
+        await addUserInfo({token: token.data});
       } catch (err) {
         console.log(err);
       }
     }
     getToken();
-  })
+  },[])
 
   useEffect(() => {
     const unsubscribe = onSnapshot(query(collection(db, "goals"), where("user", "==", auth.currentUser.uid)),(querySnapshot) => {
@@ -94,6 +102,26 @@ export default function Home({navigation}) {
     // console.log("pressed: " + item.id);
     navigation.navigate('Detail', {goalItem: item});
   }
+  
+  async function pushNotificationHandler() {
+    try {
+    const userInfo = await getUserInfo();
+    await fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+      "content-type": "application/json",
+      },
+      body: JSON.stringify({
+      to: userInfo.token,
+      title: "Push Notification",
+      body: "This is a push notification",
+      data: { url:"https://google.com" },
+      })
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -102,6 +130,7 @@ export default function Home({navigation}) {
         <Header appName={name} />
         <Input sendChangedText={onTextEntered} modalVisible={modalVisible} cancelPressed={onCancel}/>
         <Button title="Add A Task" onPress={()=>setModalVisible(true)}/>
+        <Button title="Push Notification" onPress={()=>pushNotificationHandler()} />
       </View>
       <View style={styles.bottomContainer}>
         <FlatList

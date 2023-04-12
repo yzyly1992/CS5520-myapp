@@ -14,9 +14,9 @@ export async function deleteItem(id) {
     await deleteDoc(doc(db, "goals", id));
 }
 
-export async function addUserInfo(location) {
+export async function addUserInfo(info) {
     try {
-        await setDoc(doc(db, "users", auth.currentUser.uid), location);
+        await setDoc(doc(db, "users", auth.currentUser.uid), info, { merge: true });
     } catch (err) {
         console.log(err);
     }
